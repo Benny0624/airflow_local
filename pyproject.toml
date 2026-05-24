@@ -1,0 +1,9 @@
+[project]
+name = "airflow-local"
+version = "0.1.0"
+requires-python = ">=3.8"
+dependencies = [
+    # 在這裡加套件，例如：
+    # "pandas>=2.0",
+    # "requests",
+]

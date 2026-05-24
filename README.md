@@ -21,34 +21,25 @@ docker compose down -v
 
 ## 加裝 Python 套件
 
-`apache/airflow:2.11.0` image 只預裝 Airflow 核心套件。
-DAG 裡用到 image 沒有的套件（例如 `croniter`、`pyyaml`）就需要額外安裝。
+套件透過 `pyproject.toml` + `uv` 在 build 階段安裝，不在 container 啟動時安裝。
 
-### 方法：透過 `_PIP_ADDITIONAL_REQUIREMENTS`
+**Step 1：編輯 `pyproject.toml`，在 `dependencies` 加入套件**
 
-Airflow 官方 image 支援這個環境變數，container 啟動時會自動 `pip install` 指定的套件。
-
-**Step 1：編輯 `.env`，在 `_PIP_ADDITIONAL_REQUIREMENTS` 填入套件名（空白分隔）**
-
-```
-_PIP_ADDITIONAL_REQUIREMENTS=croniter pyyaml
-```
-
-多個套件可以同時填，也可以指定版本：
-
-```
-_PIP_ADDITIONAL_REQUIREMENTS=croniter==2.0.5 pyyaml apache-airflow-providers-google
+```toml
+[project]
+dependencies = [
+    "croniter==2.0.5",
+    "pyyaml",
+    "apache-airflow-providers-google",
+]
 ```
 
-**Step 2：重啟 container 讓設定生效**
+**Step 2：重新 build image 並啟動**
 
 ```bash
-docker compose down
+docker compose build
 docker compose up -d
 ```
-
-> 注意：每次 container 啟動都會重新 pip install，冷啟動會慢幾秒。
-> 若套件量多、啟動速度是問題，考慮自己 build image（繼承官方 image 再 `pip install`）。
 
 ## 目錄結構
 
@@ -60,7 +51,9 @@ airflow_local/
 ├── plugins/                 # 自定義 plugin
 ├── config/                  # airflow.cfg override
 ├── docker-compose.yml
-└── .env                     # UID / 帳密 / 額外套件
+├── Dockerfile               # 繼承官方 image，用 uv 安裝套件
+├── pyproject.toml           # Python 套件清單
+└── .env                     # UID / 帳密
 ```
 
 ## 常用指令
