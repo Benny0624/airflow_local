@@ -1,0 +1,12 @@
+# dbt
+dags/**/target/
+dags/**/dbt_packages/
+dags/**/logs/
+dags/**/.user.yml
+
+# airflow
+logs/
+
+# python
+__pycache__/
+*.pyc

@@ -1,0 +1,41 @@
+name: audit_helper_test
+version: '1.0.0'
+config-version: 2
+
+profile: audit_helper_test
+
+model-paths: ["models/audits"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+seeds:
+  audit_helper_test:
+    source_data:
+      +column_types:
+        id: integer
+        amount: numeric(10,2)
+    target_data:
+      +column_types:
+        id: integer
+        amount: numeric(10,2)
+    orders_source:
+      +column_types:
+        order_id: integer
+        customer_id: integer
+        quantity: integer
+        price: numeric(10,2)
+    orders_target:
+      +column_types:
+        order_id: integer
+        customer_id: integer
+        quantity: integer
+        price: numeric(10,2)
+
+models:
+  audit_helper_test:
+    +materialized: table

@@ -1,0 +1,6 @@
+order_id,customer_id,product,quantity,price,status
+1001,1,Apple,5,1.50,shipped
+1002,2,Banana,12,0.80,shipped
+1003,3,Cherry,3,3.50,shipped
+1004,4,Date,2,5.00,cancelled
+1006,6,Fig,4,2.50,pending
